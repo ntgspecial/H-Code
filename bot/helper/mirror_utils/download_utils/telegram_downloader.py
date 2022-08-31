@@ -34,6 +34,13 @@ class TelegramDownloadHelper:
         with global_lock:
             GLOBAL_GID.add(file_id)
         with self.__resource_lock:
+            if (name.startswith('@Telugudubbing_movies_')):
+                temp_name=name.replace('@Telugudubbing_movies_','')
+                temp_name=temp_name.replace('_','')
+                name=temp_name
+            elif (name.startswith("www.")):
+                temp_name = name.split(" - ",1) 
+                name = temp_name[-1]
             self.name = name
             self.size = size
             self.__id = file_id
@@ -86,8 +93,22 @@ class TelegramDownloadHelper:
                 download = media.file_unique_id not in GLOBAL_GID
             if filename == "":
                 name = media.file_name
+                if (name.startswith('@Telugudubbing_movies_')):
+                    temp_name=name.replace('@Telugudubbing_movies_','')
+                    temp_name=temp_name.replace('_','')
+                    name=temp_name
+                elif (name.startswith("www.")):
+                    temp_name = name.split(" - ",1) 
+                    name = temp_name[-1]
             else:
                 name = filename
+                if (name.startswith('@Telugudubbing_movies_')):
+                    temp_name=name.replace('@Telugudubbing_movies_','')
+                    temp_name=temp_name.replace('_','')
+                    name=temp_name
+                elif (name.startswith("www.")):
+                    temp_name = name.split(" - ",1) 
+                    name = temp_name[-1]
                 path = path + name
 
             if download:
