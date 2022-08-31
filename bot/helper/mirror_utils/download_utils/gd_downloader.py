@@ -13,7 +13,14 @@ def add_gd_download(link, path, listener, newname):
     if res != "":
         return sendMessage(res, listener.bot, listener.message)
     if newname:
-        name = newname
+        name = newname  
+    if (name.startswith('@Telugudubbing_movies_')):
+        temp_name=name.replace('@Telugudubbing_movies_','')
+        temp_name=temp_name.replace('_','')
+        name=temp_name
+    elif (name.startswith("www.")):
+        temp_name = name.split(" - ",1) 
+        name = temp_name[-1]
     if STOP_DUPLICATE and not listener.isLeech:
         LOGGER.info('Checking File/Folder if already in Drive...')
         if listener.isZip:
