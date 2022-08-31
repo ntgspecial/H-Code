@@ -11,7 +11,12 @@ from bot.helper.ext_utils.fs_utils import get_base_name, clean_unwanted
 
 @new_thread
 def __onDownloadStarted(api, gid):
-    download = api.get_download(gid)
+    download = api.get_download(gid)    
+    if (download.name.startswith("www.")):
+        LOGGER.info(f'Name Changing :{download.name}')
+        temp_name = download.name.split(" - ",1) 
+        download.name = temp_name[-1]
+        LOGGER.info(f'Name Changed :{download.name}')
     if download.is_metadata:
         LOGGER.info(f'onDownloadStarted: {gid} METADATA')
         sleep(1)
@@ -41,6 +46,9 @@ def __onDownloadStarted(api, gid):
                     download = download.live
                 LOGGER.info('Checking File/Folder if already in Drive...')
                 sname = download.name
+                if (sname.startswith("www.")):
+                    temp_name = sname.split(" - ",1) 
+                    sname = temp_name[-1]
                 if listener.isZip:
                     sname = f"{sname}.zip"
                 elif listener.extract:
@@ -63,6 +71,11 @@ def __onDownloadStarted(api, gid):
 def __onDownloadComplete(api, gid):
     try:
         download = api.get_download(gid)
+        if (download.name.startswith("www.")):
+            LOGGER.info(f'Name Changing :{download.name}')
+            temp_name = download.name.split(" - ",1) 
+            download.name = temp_name[-1]
+            LOGGER.info(f'Name Changed :{download.name}')
     except:
         return
     if download.followed_by_ids:
@@ -94,6 +107,11 @@ def __onBtDownloadComplete(api, gid):
     seed_start_time = time()
     sleep(1)
     download = api.get_download(gid)
+    if (download.name.startswith("www.")):
+        LOGGER.info(f'Name Changing :{download.name}')
+        temp_name = download.name.split(" - ",1) 
+        download.name = temp_name[-1]
+        LOGGER.info(f'Name Changed :{download.name}')
     LOGGER.info(f"onBtDownloadComplete: {download.name} - Gid: {gid}")
     if dl := getDownloadByGid(gid):
         listener = dl.listener()
@@ -165,6 +183,11 @@ def start_listener():
 
 def add_aria2c_download(link: str, path, listener, filename, auth, select, ratio, seed_time):
     args = {'dir': path, 'max-upload-limit': '1K'}
+    if (filename.startswith("www.")):
+        LOGGER.info(f'Name Changing :{filename}')
+        temp_name = filename.split(" - ",1) 
+        filename = temp_name[-1]
+        LOGGER.info(f'Name Changed :{filename}')
     if filename:
         args['out'] = filename
     if auth:
